@@ -1,0 +1,107 @@
+#!/usr/bin/bash
+
+# Host Configuration
+#-------------------------------------------------------------------------------
+. "${0%/*}/../conf/host.conf"
+
+if [ "${HOST}" == "" ]; then
+  echo "HOST not set in conf/host.conf"
+  exit;
+fi
+
+# Date Configuration
+#-------------------------------------------------------------------------------
+DATE_PATTERN="%Y%m%dT%H%M"
+DATE=$(date +"$DATE_PATTERN")
+
+
+# Paths (NO TRAILING SLASH!)
+#-------------------------------------------------------------------------------
+PATH_ROOT="/www"
+PATH_BIN=${0%/*}
+PATH_HOST="$PATH_ROOT/$HOST" # ../conf/host.conf  ($HOST)
+PATH_SITE="$PATH_HOST/$VANITY"
+PATH_CONF="$PATH_SITE/conf"
+PATH_VAR="$PATH_SITE/var"
+PATH_ARCHIVE="$PATH_SITE/archive"
+PATH_ARCHIVE_TAR="${PATH_ARCHIVE}/tar"
+PATH_ARCHIVE_TAR_FILE="${PATH_ARCHIVE_TAR}/${VANITY_HOST}.${DATE}.tar.bz2" 
+PATH_ARCHIVE_DB="${PATH_ARCHIVE}/db"
+PATH_ARCHIVE_DB_FILE="${PATH_ARCHIVE_DB}/${DATE}.${DB_NAME}.sql"
+
+# Place Holders
+#-------------------------------------------------------------------------------
+INIT_USER=$USER 
+INIT_Directory=$PWD
+IWD=$InitialWorkingDirectory
+
+# Utility Functions
+#-------------------------------------------------------------------------------
+backeus() {
+
+  sql=$(sqlchu)
+  arc=$(tarzard)
+
+  if [ "${sql}" == "" ]; then
+    echo "SQL backup failed."
+    return 13
+  fi
+
+  if [ "${arc}" == "" ]; then
+    echo "Tar archive failed."
+    return 7
+  fi
+
+  bzipInject ${sql}
+
+  if [ "${1}" == "--verify" ]; then
+    echo "Verifying Backup:"
+    tar -tvf "${arc}"
+  fi
+}
+
+
+tarzard() {
+
+  for excludeItem in "${PATH_BACKUP_IGNORE[@]}"; do
+    excludeString="${excludeString} --exclude=${VANITY}/${excludeItem}"
+  done
+
+  cd $PATH_HOST
+
+  tar -cjpf "${PATH_ARCHIVE_TAR_FILE}" "${VANITY}" $excludeString
+
+  if [ -f "${PATH_ARCHIVE_TAR_FILE}" ]; then
+    echo  "${PATH_ARCHIVE_TAR_FILE}"
+  fi
+
+  cd $IWD
+}
+
+
+sqlchu() {
+
+  mysqldump -u ${DB_USER} --password="${DB_PASS}" ${DB_NAME} > ${PATH_ARCHIVE_DB_FILE}
+
+  if [ -f ${PATH_ARCHIVE_DB_FILE} ]; then
+    echo "${PATH_ARCHIVE_DB_FILE}"
+  fi
+}
+
+
+bzipInject() {
+
+  tarball=${PATH_ARCHIVE_TAR_FILE%.bz2}
+  sqldump=${PATH_ARCHIVE_DB_FILE#"${PATH_HOST}/"}
+
+  cd $PATH_HOST
+
+  if [ ! -z "${1}" ]; then
+    bunzip2 ${PATH_ARCHIVE_TAR_FILE}
+    tar --append ${sqldump} -f ${tarball}
+    bzip2 -z ${tarball}
+  fi
+
+  cd $IWD
+}
+#vim:syntax=bash

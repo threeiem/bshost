@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+. "${0%/*}/init.shlib"
+
+tarzard
+
+#vim:syntax=bash

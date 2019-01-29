@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+. "${0%/*}/init.shlib"
+
+sqlchu
+
+#vim:syntax=bash
