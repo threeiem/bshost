@@ -2,12 +2,19 @@
 
 # Host Configuration
 #-------------------------------------------------------------------------------
-. "${0%/*}/../conf/host.conf"
+if [ -f "${0%/*}/../conf/host.conf" ]; then
 
-if [ "${HOST}" == "" ]; then
-  echo "HOST not set in conf/host.conf"
+  . "${0%/*}/../conf/host.conf"
+
+  if [ "${HOST}" == "" ]; then
+    echo "HOST not set in conf/host.conf"
+    exit;
+  fi
+else
+  echo "$(readlink -mn ${0%/*}/../conf/host.conf) not found."
   exit;
 fi
+
 
 # Date Configuration
 #-------------------------------------------------------------------------------
@@ -29,11 +36,13 @@ PATH_ARCHIVE_TAR_FILE="${PATH_ARCHIVE_TAR}/${VANITY_HOST}.${DATE}.tar.bz2"
 PATH_ARCHIVE_DB="${PATH_ARCHIVE}/db"
 PATH_ARCHIVE_DB_FILE="${PATH_ARCHIVE_DB}/${DATE}.${DB_NAME}.sql"
 
+
 # Place Holders
 #-------------------------------------------------------------------------------
 INIT_USER=$USER 
 INIT_Directory=$PWD
 IWD=$InitialWorkingDirectory
+
 
 # Utility Functions
 #-------------------------------------------------------------------------------
