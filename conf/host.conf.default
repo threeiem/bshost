@@ -3,16 +3,16 @@
 
 # HTTP Host
 #------------------------------------------------------------------------------- 
-HOST="domain.tld"
-VANITY="www"
+HOST="DEFAULT_HOST"
+VANITY="DEFAULT_VANITY"
 VANITY_HOST="$VANITY.$HOST"
 
 # RDBMS Host
 #------------------------------------------------------------------------------- 
-DB_NAME="SECRET_DB_NAME"
-DB_USER="SECRET_DB_USER"
-DB_PASS="SECRET_DB_PASSWORD"
-DB_HOST="localhost"
+DB_NAME="DEFAULT_DB_NAME"
+DB_USER="DEFAULT_DB_USERNAME"
+DB_PASS="DEFAULT_DB_PASSWORD"
+DB_HOST="DEFAULT_DB_HOST"
 DB_CHARSET="utf8mb4"
 
 # HTTP Host

@@ -1,0 +1,69 @@
+#!/bin/bash
+PATH_HOST_DEFAULT="${0%/*}/../conf/host.conf.default"
+
+inputHost=""
+inputVanity=""
+inputDBName=""
+inputDBUsername=""
+inputDBPassword=""
+inputDBHost=""
+
+
+while [ -z "${ACCEPT}" ]; do
+
+  read -p "Domain Name: " inputHost
+  read -p "Vanity Host Name (www): " inputVanity
+  inputVanity="${inputVanity:-www}"
+  echo 
+  read -p "${inputVanity}.${inputHost} (y/n):" -r
+
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo
+    break
+  else
+    echo
+  fi
+
+done
+
+while [ -z "" ]; do
+
+  read -p "Database Name: " inputDBName
+  read -p "Database Username: " inputDBUsername
+  read -p "Database Password: " inputDBPassword
+  read -p "Database Host (localhost): " inputDBHost
+  inputDBHost="${inputDBHost:-localhost}"
+  echo
+  echo "Verify Database Settings:"
+  echo
+  echo "Database Name: ${inputDBName}"
+  echo "Database Username: ${inputDBUsername}"
+  echo "Database Password: ${inputDBPassword}"
+  echo "Database Host: ${inputDBHost}"
+  echo
+  read -p "(y/n):" -r
+
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    break
+    echo
+  else
+    echo
+  fi
+
+done
+
+if [ -f "${PATH_HOST_DEFAULT}"  ]; then
+  HOST_DEFAULT="$(cat "${PATH_HOST_DEFAULT}")"
+  HOST_OUTPUT="${HOST_DEFAULT/DEFAULT_HOST/$inputHost}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_VANITY/$inputVanity}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_NAME/$inputDBName}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_USERNAME/$inputDBUsername}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_PASSWORD/$inputDBPassword}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_HOST/$inputDBHost}"
+else
+  echo "doink."
+fi
+
+echo "${HOST_OUTPUT}"
+
+
