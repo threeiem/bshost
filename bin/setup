@@ -1,69 +1,109 @@
 #!/bin/bash
-PATH_HOST_DEFAULT="${0%/*}/../conf/host.conf.default"
+PATH_CONF_HOST_DEFAULT="${0%/*}/../conf/host.conf.default"
+PATH_CONF_HOST="${0%/*}/../conf/host.conf"
 
-inputHost=""
-inputVanity=""
-inputDBName=""
-inputDBUsername=""
-inputDBPassword=""
-inputDBHost=""
+declare -A input=(
+  [Host]="" 
+  [Vanity]="www"
+  [DBName]=""
+  [DBUsername]=""
+  [DBPassword]=""
+  [DBHost]="localhost"
+)
 
+declare -A line=(
+  [thin]="----------------------------------------------------------------"
+  [thik]="================================================================"
+)
 
-while [ -z "${ACCEPT}" ]; do
+echo
+echo "${line[thik]}"
+echo "  BS Host Setup"
+echo "${line[thik]}"
 
-  read -p "Domain Name: " inputHost
-  read -p "Vanity Host Name (www): " inputVanity
-  inputVanity="${inputVanity:-www}"
-  echo 
-  read -p "${inputVanity}.${inputHost} (y/n):" -r
+while [ -z "${NEVER_LOGOFF}" ]; do
 
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo
-    break
-  else
-    echo
-  fi
-
-done
-
-while [ -z "" ]; do
-
-  read -p "Database Name: " inputDBName
-  read -p "Database Username: " inputDBUsername
-  read -p "Database Password: " inputDBPassword
-  read -p "Database Host (localhost): " inputDBHost
-  inputDBHost="${inputDBHost:-localhost}"
   echo
-  echo "Verify Database Settings:"
+
+  read -p "Domain Name (domain.tld): " input[Host]
+  #TODO validate hostname
+  read -p "Vanity Host Name [www]: " inputVanity
+  #TODO validate inputVanity
+  input[Vanity]="${inputVanity:-www}"
+
   echo
-  echo "Database Name: ${inputDBName}"
-  echo "Database Username: ${inputDBUsername}"
-  echo "Database Password: ${inputDBPassword}"
-  echo "Database Host: ${inputDBHost}"
+  echo "${line[thin]}"
   echo
-  read -p "(y/n):" -r
+
+  read -p "${input[Vanity]}.${input[Host]} (y/n):" -r
 
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     break
-    echo
-  else
-    echo
   fi
-
+ 
 done
 
-if [ -f "${PATH_HOST_DEFAULT}"  ]; then
-  HOST_DEFAULT="$(cat "${PATH_HOST_DEFAULT}")"
-  HOST_OUTPUT="${HOST_DEFAULT/DEFAULT_HOST/$inputHost}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_VANITY/$inputVanity}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_NAME/$inputDBName}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_USERNAME/$inputDBUsername}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_PASSWORD/$inputDBPassword}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_HOST/$inputDBHost}"
-else
-  echo "doink."
+echo
+echo "${line[thin]}"
+echo
+read -p "Setup Database? (y/n):" -r
+echo 
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+  while [ -z "${NEVER_LOGOFF}" ]; do
+
+    read -p "Database Name: " input[DBName]
+    read -p "Database Username: " input[DBUsername]
+    read -p "Database Password: " input[DBPassword]
+    read -p "Database Host [localhost]: " inputDBHost
+    input[DBHost]="${inputDBHost:-localhost}"
+
+    echo
+    echo "${line[thin]}"
+    echo 
+
+    echo "Verify Database Settings:"
+
+    echo
+    echo "${line[thin]}"
+    echo 
+
+    echo "Database Name: ${input[DBName]}"
+    echo "Database Username: ${input[DBUsername]}"
+    echo "Database Password: ${input[DBPassword]}"
+    echo "Database Host: ${input[DBHost]}"
+
+    echo
+    echo "${line[thin]}"
+    echo 
+
+    read -p "Database settings correct? (y/n):" -r
+    echo 
+  
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      break
+    fi
+  
+  done
 fi
 
-echo "${HOST_OUTPUT}"
+echo
+echo "${line[thik]}"
+echo 
 
+if [ -f "${PATH_CONF_HOST_DEFAULT}"  ]; then
+  HOST_DEFAULT="$(cat "${PATH_CONF_HOST_DEFAULT}")"
+  HOST_OUTPUT="${HOST_DEFAULT/DEFAULT_HOST/${input[Host]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_VANITY/${input[Vanity]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_NAME/${input[DBName]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_USERNAME/${input[DBUsername]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_PASSWORD/${input[DBPassword]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_HOST/${input[DBHost]}}"
+else
 
+  echo "Default hostfile is missing (${PATH_CONF_HOST_DEFAULT})."
+
+fi
+
+echo "${HOST_OUTPUT}" 

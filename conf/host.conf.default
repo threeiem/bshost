@@ -1,13 +1,13 @@
 #!/bin/bash
 # Hosting Configuration stored as bash environment variables
 
-# HTTP Host
+# Hostname
 #------------------------------------------------------------------------------- 
 HOST="DEFAULT_HOST"
 VANITY="DEFAULT_VANITY"
 VANITY_HOST="$VANITY.$HOST"
 
-# RDBMS Host
+# MySQL/MariaDB 
 #------------------------------------------------------------------------------- 
 DB_NAME="DEFAULT_DB_NAME"
 DB_USER="DEFAULT_DB_USERNAME"
@@ -15,7 +15,7 @@ DB_PASS="DEFAULT_DB_PASSWORD"
 DB_HOST="DEFAULT_DB_HOST"
 DB_CHARSET="utf8mb4"
 
-# HTTP Host
+# HTTP Service
 #------------------------------------------------------------------------------- 
 HTTP_USER="apache"
 
