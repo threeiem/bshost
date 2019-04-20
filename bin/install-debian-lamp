@@ -1,0 +1,149 @@
+#!/bin/bash
+if [[ $UID != 0 ]]; then echo "Pleeb please."; exit; fi
+
+update-debian() {
+  apt-get update && apt-get upgrade -y
+}
+
+apache2_deploy() {
+
+  # HTML
+  touch /var/www/html/index.html # Use current timestamp
+  cp -a /var/www/html/index.html /var/www/html/index.html.dist
+  echo "<?php phpinfo(); ?>" > /var/www/html/php_details.php
+
+  # Apache 2 configuration changes  
+  touch /etc/apache2/apache2.conf 
+  cp -a /etc/apache2/apache2.conf /etc/apache2/apache2.conf.dist
+  sed -i "s/Options Indexes FollowSymLinks/Options FollowSymLinks/" /etc/apache2/apache2.conf
+  
+  # Start and enable the service
+  systemctl start apache2.service
+  systemctl enable apache2.service
+
+}
+
+linuxVersion() {
+  echo "Debian $(cat /etc/debian_version)"
+}
+
+apache2Version() {
+  A2V="$(sudo apache2ctl -v|grep ersion)"
+  echo "${A2V/Server version: /}"
+}
+
+mysqlVersion() {
+  mysql --version|grep ^mysql
+}
+
+phpVersion() {
+  php --version|grep ^PHP
+}
+
+testLAMP() {
+  echo "$(printf '=%.0s' {1..80})"
+  echo "L - $(linuxVersion) $(uname -nrm)"
+  echo "$(printf '=%.0s' {1..80})"
+  echo "A - $(apache2Version)"
+  echo "$(printf '=%.0s' {1..80})"
+  echo "M - $(mysqlVersion )"
+  echo "$(printf '=%.0s' {1..80})"
+  echo "P - $(phpVersion)"
+  echo "$(printf '=%.0s' {1..80})"
+}
+
+
+#-------------------------------------------------------------------------------
+# Sury Packages
+#-------------------------------------------------------------------------------
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php7.3.list
+apt-get -y install ca-certificates apt-transport-https lsb-release
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+update-debian
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# MariaDB
+#-------------------------------------------------------------------------------
+apt-get -y install software-properties-common
+apt-get -y install mariadb-server mariadb-client
+mysql_secure_installation
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# Apache 2
+#-------------------------------------------------------------------------------
+apt-get -y install apache2 lynx -y
+apache2 -v
+apache2_deploy
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# PHP 
+#-------------------------------------------------------------------------------
+# php-apcu              # APC User Cache for PHP
+# php-geoip             # GeoIP module for PHP
+# php-imagick           # Provides a wrapper to the ImageMagick library
+# php-memcached         # memcached extension module for PHP, uses libmemcached
+# php-oauth             # OAuth 1.0 consumer and provider extension
+# php-ssh2              # Bindings for the libssh2 library
+# php-uploadprogress    # file upload progress tracking extension for PHP
+# php-uuid              # PHP UUID extension
+# libapache2-mod-php7.3 # server-side, HTML-embedded scripting language (Apache 2 module)
+# php-ds                # PHP extension providing efficient data structures for PHP 7
+# php7.3                # server-side, HTML-embedded scripting language (metapackage)
+# php7.3-bcmath         # Bcmath module for PHP
+# php7.3-bz2            # bzip2 module for PHP
+# php7.3-cli            # command-line interpreter for the PHP scripting language
+# php7.3-common         # documentation, examples and common module for PHP
+# php7.3-curl           # CURL module for PHP
+# php7.3-gd             # GD module for PHP
+# php7.3-intl           # Internationalisation module for PHP
+# php7.3-json           # JSON module for PHP
+# php7.3-mbstring       # MBSTRING module for PHP
+# php7.3-mysql          # MySQL module for PHP
+# php7.3-opcache        # Zend OpCache module for PHP
+# php7.3-pgsql          # PostgreSQL module for PHP
+# php7.3-pspell         # pspell module for PHP
+# php7.3-readline       # readline module for PHP
+# php7.3-sqlite3        # SQLite3 module for PHP
+# php7.3-xml            # DOM, SimpleXML, WDDX, XML, and XSL module for PHP
+#-------------------------------------------------------------------------------
+PHPModule=" 
+  php7.3
+  php7.3-cli
+  php-apcu
+  php-geoip 
+  php-imagick
+  php-memcached
+  php-oauth
+  php-ssh2
+  php-uploadprogress
+  php-uuid
+  libapache2-mod-php7.3
+  php-ds
+  php7.3-bcmath
+  php7.3-bz2
+  php7.3-common
+  php7.3-curl
+  php7.3-gd
+  php7.3-intl
+  php7.3-json
+  php7.3-mbstring
+  php7.3-mysql
+  php7.3-opcache
+  php7.3-pgsql
+  php7.3-pspell
+  php7.3-readline
+  php7.3-sqlite3
+  php7.3-xml"
+
+apt-get -y install ${phpModule}
+update-alternatives --set php "/usr/bin/php7.3"
+update-alternatives --display php
+php --ini|grep "Loaded Configuration File"
+
+testLAMP
