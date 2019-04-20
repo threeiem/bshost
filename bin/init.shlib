@@ -13,7 +13,7 @@ if [ -f "${0%/*}/../conf/host.conf" ]; then
   if [ "${HOST}" == "" ]; then
     echo "HOST is empty/missing in conf/host.conf"
     exit;
-  elif [ "${HOST}" == "BS_DEFAULT_HOST"]; then
+  elif [ "${HOST}" == "BS_DEFAULT_HOST" ]; then
     echo "HOST not set in conf/host.conf"
     exit
   else
