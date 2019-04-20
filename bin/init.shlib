@@ -1,4 +1,7 @@
 #!/usr/bin/bash
+#===============================================================================
+# +Bash Shell Host+
+#===============================================================================
 
 # Host Configuration
 #-------------------------------------------------------------------------------
@@ -7,8 +10,10 @@ if [ -f "${0%/*}/../conf/host.conf" ]; then
   . "${0%/*}/../conf/host.conf"
 
   if [ "${HOST}" == "" ]; then
-    echo "HOST not set in conf/host.conf"
+    echo "HOST is empty/missing in conf/host.conf"
     exit;
+  elif [ "${HOST}" == "BSDEFAULT_HOST"]; then
+    echo "HOST not set in conf/host.conf"
   fi
 else
   echo "$(readlink -mn ${0%/*}/../conf/host.conf) not found."

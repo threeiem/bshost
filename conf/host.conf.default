@@ -3,16 +3,16 @@
 
 # Hostname
 #------------------------------------------------------------------------------- 
-HOST="DEFAULT_HOST"
-VANITY="DEFAULT_VANITY"
+HOST="BS_DEFAULT_HOST"
+VANITY="BS_DEFAULT_VANITY"
 VANITY_HOST="$VANITY.$HOST"
 
 # MySQL/MariaDB 
 #------------------------------------------------------------------------------- 
-DB_NAME="DEFAULT_DB_NAME"
-DB_USER="DEFAULT_DB_USERNAME"
-DB_PASS="DEFAULT_DB_PASSWORD"
-DB_HOST="DEFAULT_DB_HOST"
+DB_NAME="BS_DEFAULT_DB_NAME"
+DB_USER="BS_DEFAULT_DB_USERNAME"
+DB_PASS="BS_DEFAULT_DB_PASSWORD"
+DB_HOST="BS_DEFAULT_DB_HOST"
 DB_CHARSET="utf8mb4"
 
 # HTTP Service
@@ -22,7 +22,6 @@ HTTP_USER="apache"
 # Paths
 #------------------------------------------------------------------------------- 
 declare -a PATH_BACKUP_IGNORE=(
-  "archive/db/*"
   "archive/tar/*"
   "logs/*.log"
 )
