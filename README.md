@@ -8,7 +8,7 @@ You must sudo as root to run these because of file permissions with the apache s
 Command that archives performs a tar and bzip2 on the files in the site.
 
 ```
-bin/archive
+sudo bin/archive
 ```
 
 ### Parallel Bzip2
@@ -27,7 +27,7 @@ Remove `archive/db` from the exclude array in `host.conf` to backup old database
 The `--verify` flag will check the archive file when it is complete.
 
 ```
-bin/backup [--verify]
+sudo bin/backup [--verify]
 ```
 
 ## Maria DB Dump (bin/dbdump)
@@ -37,13 +37,13 @@ These files are excluded by default, but the most recent is saved with `bin/arch
 Returns the database backup filename when successful. 
 
 ```
-bin/dbdump
+sudo bin/dbdump
 ```
 
 ## BS Host Setup
 
 Command for setting up host and generating the host.conf file.
-
+Setup does not require the `root` user.
 ```
 bin/setup
 ```
@@ -84,12 +84,4 @@ This is the script from reading countless how-to articles and examples.
 
 ```
 sudo bin/install-debian-lamp
-```
-
-# Adding a Apache 2 virtual host 
-
-To add a new virtual host use the setup script to begin a new host/vanity host layout.
-
-```
-sudo bin/setup 
 ```
