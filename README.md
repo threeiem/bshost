@@ -42,8 +42,6 @@ Setup does not require the `root` user.
 bin/setup
 ```
 
-
-
 ## Archive (archive/)
 
 This is the location of the back-up files. Often before updates it's important to back that shit up.
@@ -67,6 +65,33 @@ Tar archive files that are bzip2 files created by bshost are stored here.
 
 ```
 archive/tar/
+```
+
+## Apache Host Setup
+
+### Vanity Host Root Path
+
+After setup the root path to the vanity host needs to be be configured.
+The convention with BSHost is to start off the root with 'www' followed by the domain name and vanity host.
+
+```
+/www/exampledomain.tld/example-vanity-host/
+```
+
+### Logs
+
+Apache logs are stored in the logs folder.
+
+```
+logs/
+```
+
+### Document Root
+
+The vanity host's document root for the website.
+
+```
+public/
 ```
 
 ## Operating System Specific

@@ -33,7 +33,6 @@ DATE=$(date +"$DATE_PATTERN")
 
 # Paths (NO TRAILING SLASH!)
 #-------------------------------------------------------------------------------
-PATH_ROOT="/www"
 PATH_BIN=${0%/*}
 PATH_HOST="$PATH_ROOT/$HOST" # ../conf/host.conf  ($HOST)
 PATH_SITE="$PATH_HOST/$VANITY"

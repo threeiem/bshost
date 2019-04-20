@@ -3,6 +3,7 @@
 
 # Hostname
 #------------------------------------------------------------------------------- 
+PATH_ROOT="/www"
 HOST="BS_DEFAULT_HOST"
 VANITY="BS_DEFAULT_VANITY"
 VANITY_HOST="$VANITY.$HOST"
