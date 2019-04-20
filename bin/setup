@@ -94,16 +94,20 @@ echo
 
 if [ -f "${PATH_CONF_HOST_DEFAULT}"  ]; then
   HOST_DEFAULT="$(cat "${PATH_CONF_HOST_DEFAULT}")"
-  HOST_OUTPUT="${HOST_DEFAULT/DEFAULT_HOST/${input[Host]}}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_VANITY/${input[Vanity]}}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_NAME/${input[DBName]}}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_USERNAME/${input[DBUsername]}}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_PASSWORD/${input[DBPassword]}}"
-  HOST_OUTPUT="${HOST_OUTPUT/DEFAULT_DB_HOST/${input[DBHost]}}"
+  HOST_OUTPUT="${HOST_DEFAULT/BS_DEFAULT_HOST/${input[Host]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_VANITY/${input[Vanity]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_DB_NAME/${input[DBName]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_DB_USERNAME/${input[DBUsername]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_DB_PASSWORD/${input[DBPassword]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_DB_HOST/${input[DBHost]}}"
 else
 
   echo "Default hostfile is missing (${PATH_CONF_HOST_DEFAULT})."
 
 fi
 
-echo "${HOST_OUTPUT}" 
+echo "${HOST_OUTPUT}" > ${PATH_CONF_HOST}
+
+if [ -f "${PATH_CONF_HOST}" ]; then
+  cat "${PATH_CONF_HOST}";
+fi

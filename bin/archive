@@ -1,6 +1,7 @@
-#!/usr/bin/bash
+#!/bin/bash
 . "${0%/*}/init.shlib"
 
+echo "Archive Site: ${HOST}"
 tarzard
 
 #vim:syntax=bash

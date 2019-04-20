@@ -23,5 +23,6 @@ HTTP_USER="apache"
 #------------------------------------------------------------------------------- 
 declare -a PATH_BACKUP_IGNORE=(
   "archive/tar/*"
+  "archive/db/*"
   "logs/*.log"
 )
