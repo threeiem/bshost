@@ -97,9 +97,8 @@ tarzard() {
     tar -I pbzip2 -cpf "${PATH_ARCHIVE_TAR_FILE}" "${VANITY}" "${excludeString}"
   fi
 
-  chown ${INIT_USER}:${INIT_USER}  ${PATH_ARCHIVE_TAR_FILE}
-
   if [ -f "${PATH_ARCHIVE_TAR_FILE}" ]; then
+    chown ${INIT_USER}:${INIT_USER}  ${PATH_ARCHIVE_TAR_FILE}
     echo  "${PATH_ARCHIVE_TAR_FILE}"
   fi
 
