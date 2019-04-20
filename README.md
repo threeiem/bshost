@@ -2,44 +2,14 @@
 
 Bash helpers for hosting sites.
 
-## Getting started
+## Bash Scripts, the "BS" (bin/)
 
-You can just use git and clone the repository or you can use the LAMP install script as a helper.
-The point is to make it easier to get going with web hosting servers and hosts.
-
-## Conventions for Configuration
-
-### Archive (archive/)
-
-This is the location of the back-up files. Often before updates it's important to back that shit up.
-This is the location of the archived artifacts from the site.
-
-```
-archive/
-```
-
-#### Maria DB Archive
-
-This is the location of the Maria DB database dump files.
-
-```
-archive/db/
-```
-
-#### Tar File Archive
-
-Tar archive files that are bzip2 files created by bshost are stored here.
-
-```
-archive/tar/
-```
-
-### Bash Scripts, the "BS" (bin/)
+===============================================================================
 
 This is the location of the helper bash scripts (The BS in bshost).
 You must sudo as root to run these because of file permissions with the apache server (deal with it).
 
-#### Archive (bin/archive)
+### Archive (bin/archive)
 
 Command that archives performs a tar and bzip2 on the files in the site.
 
@@ -47,7 +17,7 @@ Command that archives performs a tar and bzip2 on the files in the site.
 bin/archive
 ```
 
-##### Parallel Bzip2
+#### Parallel Bzip2
 
 BSHost can use parallel bzip2 `pbzip` and bunzip `pbunzip` if they are installed.
 
@@ -55,7 +25,7 @@ BSHost can use parallel bzip2 `pbzip` and bunzip `pbunzip` if they are installed
 sudo apt-get install pbzip2
 ```
 
-#### Backup (bin/backup) 
+### Backup (bin/backup) 
 
 Command that dumps the database and tars everything up. 
 **Only the most recent database dump is included.**
@@ -66,7 +36,7 @@ The `--verify` flag will check the archive file when it is complete.
 bin/backup [--verify]
 ```
 
-#### Maria DB Dump (bin/dbdump)
+### Maria DB Dump (bin/dbdump)
 
 Command that dumps the database to `archive/db/`.
 These files are excluded by default, but the most recent is saved with `bin/archive`.
@@ -76,12 +46,41 @@ Returns the database backup filename when successful.
 bin/dbdump
 ```
 
-#### BS Host Setup
+### BS Host Setup
 
 Command for setting up host and generating the host.conf file.
 
 ```
 bin/setup
+```
+
+
+
+## Archive (archive/)
+
+===============================================================================
+
+This is the location of the back-up files. Often before updates it's important to back that shit up.
+This is the location of the archived artifacts from the site.
+
+```
+archive/
+```
+
+### Maria DB Archive
+
+This is the location of the Maria DB database dump files.
+
+```
+archive/db/
+```
+
+### Tar File Archive
+
+Tar archive files that are bzip2 files created by bshost are stored here.
+
+```
+archive/tar/
 ```
 
 ## Operating System Specific
