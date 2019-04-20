@@ -74,7 +74,7 @@ archive/tar/
 ### Debian 9
 
 #### Install LAMP Stack (PHP 7.3)
-To help get going quickly there are install scripts to load a VPS, Respbian, Ubuntu, etc. with a LAMP stack (Linux, Apache2, MariaDB, PHP).
+To help get going quickly there are install scripts to load a Debian based friend (Debian, Raspbian, Ubuntu, etc.) with a LAMP stack (Linux, Apache2, MariaDB, PHP).
 This is the script from reading countless how-to articles and examples.
 
 ```
