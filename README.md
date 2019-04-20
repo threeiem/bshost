@@ -3,8 +3,7 @@
 Bash helpers for hosting sites.
 
 ## Bash Scripts, the "BS" (bin/)
-
-===============================================================================
+================================
 
 This is the location of the helper bash scripts (The BS in bshost).
 You must sudo as root to run these because of file permissions with the apache server (deal with it).
@@ -57,8 +56,7 @@ bin/setup
 
 
 ## Archive (archive/)
-
-===============================================================================
+=====================
 
 This is the location of the back-up files. Often before updates it's important to back that shit up.
 This is the location of the archived artifacts from the site.
