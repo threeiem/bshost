@@ -73,12 +73,14 @@ archive/tar/
 
 ### Debian 9
 
+#### Install LAMP Stack (PHP 7.3)
 To help get going quickly there are install scripts to load a VPS, Respbian, Ubuntu, etc. with a LAMP stack (Linux, Apache2, MariaDB, PHP).
 This is the script from reading countless how-to articles and examples.
 
 ```
 sudo bin/install-debian-lamp
 ```
+
 #### Parallel Bzip2
 
 BSHost can use parallel bzip2 `pbzip2` and bunzip2 `pbunzip2` if they are installed.
@@ -88,6 +90,8 @@ sudo apt-get install pbzip2
 ```
 
 ### CentOS 7
+
+#### Parallel Bzip2
 
 BSHost can use parallel bzip2 `pbzip2` and bunzip2 `pbunzip2` if they are installed.
 
