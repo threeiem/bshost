@@ -13,14 +13,6 @@ Command that archives performs a tar and bzip2 on the files in the site.
 sudo bin/archive
 ```
 
-#### Parallel Bzip2
-
-BSHost can use parallel bzip2 `pbzip` and bunzip `pbunzip` if they are installed.
-
-```
-sudo apt-get install pbzip2
-```
-
 ### Backup (bin/backup) 
 
 Command that dumps the database and tars everything up. 
@@ -86,4 +78,19 @@ This is the script from reading countless how-to articles and examples.
 
 ```
 sudo bin/install-debian-lamp
+```
+#### Parallel Bzip2
+
+BSHost can use parallel bzip2 `pbzip2` and bunzip2 `pbunzip2` if they are installed.
+
+```
+sudo apt-get install pbzip2
+```
+
+### CentOS 7
+
+BSHost can use parallel bzip2 `pbzip2` and bunzip2 `pbunzip2` if they are installed.
+
+```
+sudo yum install pbzip2
 ```
