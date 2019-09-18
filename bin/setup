@@ -9,6 +9,7 @@ declare -A input=(
   [DBUsername]=""
   [DBPassword]=""
   [DBHost]="localhost"
+  [HTTPUser]
 )
 
 declare -A line=(
@@ -16,10 +17,39 @@ declare -A line=(
   [thik]="================================================================"
 )
 
+function guess_http_user(){
+  echo "$(ps aux|grep apache|grep -v ^root|grep -v grep|cut -f1 -d\ |head -1)"
+}
+
+
+
 echo
 echo "${line[thik]}"
 echo "  BS Host Setup"
 echo "${line[thik]}"
+
+while [ -z "${NEVER_LOGOFF}" ]; do
+
+  echo
+
+  read -p "Apache2 HTTP Server User [$(guess_http_user)]: " inputHTTPUser
+  input[HTTPUser]="${inputHTTP_USER:-$(guess_http_user)}"
+
+  echo
+  echo "${line[thin]}"
+  echo
+
+  read -p "User Name \"${input[HTTPUser]}\" (y/N):" -r
+
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    break
+  fi
+
+  echo
+  echo "${line[thin]}"
+  echo
+
+done
 
 while [ -z "${NEVER_LOGOFF}" ]; do
 
@@ -40,7 +70,7 @@ while [ -z "${NEVER_LOGOFF}" ]; do
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     break
   fi
- 
+
 done
 
 echo
@@ -94,6 +124,7 @@ echo
 
 if [ -f "${PATH_CONF_HOST_DEFAULT}"  ]; then
   HOST_DEFAULT="$(cat "${PATH_CONF_HOST_DEFAULT}")"
+  HOST_OUTPUT="${HOST_DEFAULT/BS_DEFAULT_HTTP_USER/${input[HTTPUser]}}"
   HOST_OUTPUT="${HOST_DEFAULT/BS_DEFAULT_HOST/${input[Host]}}"
   HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_VANITY/${input[Vanity]}}"
   HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_DB_NAME/${input[DBName]}}"

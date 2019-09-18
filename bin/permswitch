@@ -1,0 +1,42 @@
+#!/bin/bash
+. ${0%/*}/init.shlib
+
+config_test() {
+
+  if [ -z "${HOST}" ]; then
+    echo "HTTP host name, HOST, not configured, check conf/host.conf file."
+    exit 1;
+  fi
+
+  if [ -z "${HTTP_USER}" ]; then
+    echo "HTTP service user, HTTP_USER, not configured, check conf/host.conf file."
+    exit 11;
+  fi
+}
+
+config_test
+
+case ${1} in
+
+  "on"|"On"|"ON"|"oN")
+    # Adding ${HTTP_USER} to group ${HOST}
+    gpasswd -a ${HTTP_USER} ${HOST}
+    systemctl stop httpd.service
+    systemctl start httpd.service
+    ;;
+
+  "off"|"OFF"|"oFf"|"ofF"|"Off"|"oFF"|"OFf")
+    # Removing ${HTTP_USER} to group ${HOST}
+    gpasswd -d apache $HOST
+    systemctl stop httpd.service
+    systemctl start httpd.service
+    ;;
+
+  *)
+    if [ ! -z ${1} ]; then
+      echo "I do not \"${1}\"."
+    fi
+
+    echo "permswitch on|off"
+    ;;
+esac
