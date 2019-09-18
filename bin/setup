@@ -1,6 +1,7 @@
 #!/bin/bash
-PATH_CONF_HOST_DEFAULT="${0%/*}/../conf/host.conf.default"
-PATH_CONF_HOST="${0%/*}/../conf/host.conf"
+function guess_http_user(){
+  echo "$(ps aux|grep apache|grep -v ^root|grep -v grep|cut -f1 -d\ |head -1)"
+}
 
 declare -A input=(
   [Host]="" 
@@ -9,7 +10,7 @@ declare -A input=(
   [DBUsername]=""
   [DBPassword]=""
   [DBHost]="localhost"
-  [HTTPUser]
+  [HTTPUser]=""
 )
 
 declare -A line=(
@@ -17,11 +18,12 @@ declare -A line=(
   [thik]="================================================================"
 )
 
-function guess_http_user(){
-  echo "$(ps aux|grep apache|grep -v ^root|grep -v grep|cut -f1 -d\ |head -1)"
-}
+
+PATH_CONF_HOST_DEFAULT="${0%/*}/../conf/host.conf.default"
+PATH_CONF_HOST="${0%/*}/../conf/host.conf"
 
 
+http_user_guess=$(guess_http_user)
 
 echo
 echo "${line[thik]}"
@@ -32,8 +34,8 @@ while [ -z "${NEVER_LOGOFF}" ]; do
 
   echo
 
-  read -p "Apache2 HTTP Server User [$(guess_http_user)]: " inputHTTPUser
-  input[HTTPUser]="${inputHTTP_USER:-$(guess_http_user)}"
+  read -p "Apache2 HTTP Server User [${http_user_guess}]: " inputHTTPUser
+  input[HTTPUser]="${inputHTTPUSER:-${http_user_guess}}"
 
   echo
   echo "${line[thin]}"
@@ -123,9 +125,9 @@ echo "${line[thik]}"
 echo 
 
 if [ -f "${PATH_CONF_HOST_DEFAULT}"  ]; then
-  HOST_DEFAULT="$(cat "${PATH_CONF_HOST_DEFAULT}")"
+  HOST_DEFAULT="$(cat "${PATH_CONF_HOST_DEFAULT}")";
   HOST_OUTPUT="${HOST_DEFAULT/BS_DEFAULT_HTTP_USER/${input[HTTPUser]}}"
-  HOST_OUTPUT="${HOST_DEFAULT/BS_DEFAULT_HOST/${input[Host]}}"
+  HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_HOST/${input[Host]}}"
   HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_VANITY/${input[Vanity]}}"
   HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_DB_NAME/${input[DBName]}}"
   HOST_OUTPUT="${HOST_OUTPUT/BS_DEFAULT_DB_USERNAME/${input[DBUsername]}}"
